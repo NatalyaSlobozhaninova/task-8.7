@@ -1,197 +1,67 @@
-let minValue = parseInt(prompt('Минимальное знание числа для игры','-999'));
-let maxValue = parseInt(prompt('Максимальное знание числа для игры','999'));
-minValue < -999 ? minValue = -999 : minValue;
-maxValue > 999 ? maxValue = 999 : maxValue;
-minValue!==minValue ? minValue = minValue || -999 : minValue;
-maxValue!==maxValue ? maxValue = maxValue || 999 : maxValue;
+let minValue = parseInt(prompt('Минимальное знание числа для игры','-999')) || -999;
+minValue = (minValue < -999) ? -999 : minValue;
+let maxValue = parseInt(prompt('Максимальное знание числа для игры','999')) || 999;
+maxValue = (maxValue > 999) ? 999 : maxValue;
 alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
 let answerNumber  = Math.floor((minValue + maxValue) / 2);
 let orderNumber = 1;
-let resultTextNumber = '';
-let gameRun = true;
+let gameRun = true; 
+let qRandom = [`Я всегда угадываю\n\u{1F60E}`, `Я так и знал\n\u{1F600}`, `Ура\n\u{1F60E}`];
+let answerPhrase = [`Вы загадали неправильное число!\n\u{1F914}`, `Я сдаюсь..\n\u{1F92F}` , `Что-то не так....`];
+let guesRandom = [`Вы загадали число` , `Думаю, что загаданное число` , `Может`];
+
 
 const orderNumberField = document.getElementById('orderNumberField');
 const answerField = document.getElementById('answerField');
 
 orderNumberField.innerText = orderNumber;
-resultTextNumber = toString(answerNumber);
+answerField.innerText = `Вы загадали число ${answerNumber }?`;
 
 document.getElementById('btnRetry').addEventListener('click', function () {
+    window.location.reload();
     minValue = 0;
     maxValue = 100;
-    minValue = parseInt(prompt('Минимальное знание числа для игры','-999'));
-    maxValue = parseInt(prompt('Максимальное знание числа для игры','999'));
-    minValue < -999 ? minValue = -999 : minValue;
-    maxValue > 999 ? maxValue = 999 : maxValue;
-    minValue!==minValue ? minValue = minValue || -999 : minValue;
-    maxValue!==maxValue ? maxValue = maxValue || 999 : maxValue;
-    alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
-    answerNumber  = Math.floor((minValue + maxValue) / 2);
-    orderNumber = 1;
-    resultTextNumber = toString (answerNumber);
-    gameRun = true;
-    orderNumberField.innerText = orderNumber;
-
-
+    orderNumber = 0;
 })
 
-document.getElementById('btnLess').addEventListener('click', function () {
+document.getElementById('btnOver').addEventListener('click', function () {
     if (gameRun){
-        if (maxValue === minValue){
-            const phraseRandom = Math.round( Math.random() * 3);
-            switch (phraseRandom) {
-                case 1:
-                    answerField.innerText =  `Вы загадали неправильное число!\n\u{1F914}`;
-                    break;
-                case 2:
-                    answerField.innerText =   `Я сдаюсь..\n\u{1F92F}`;
-                    break;
-                case 3:
-                    answerField.innerText =   `Что-то не так`;
-                    break;
-
-            }
-             gameRun = false;
+        if (minValue === maxValue || minValue == answerNumber){
+            let a = answerPhrase[Math.floor( Math.random() * 3)];
+            answerField.innerText = a;
+            gameRun = false;
         } else {
-            maxValue = answerNumber  - 1;
-            answerNumber  = Math.floor((minValue + maxValue) / 2);
-            const quesRandom = Math.round( Math.random() * 3);
-            switch (quesRandom) {
-                case 1:
-                 answerField.innerText = `Вы загадали число ${resultTextNumber}?`;
-                break;
-                case 2:
-                answerField.innerText = `Думаю, что загаданное число ${resultTextNumber}?`;
-                break;
-                case 3:
-                answerField.innerText = `Может ${resultTextNumber}?`;
-                break;
-            }
+            minValue = answerNumber  + 1;
+            answerNumber = Math.floor((minValue + maxValue) / 2);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
-            resultTextNumber = toString(answerNumber);
+            let b = guesRandom[ Math.floor( Math.random() * 3) ];
+            answerField.innerText = `${b} ${answerNumber}?`;
         }
     }
 })
 
-
-
-document.getElementById('btnOver').addEventListener('click', function () {
+document.getElementById('btnLess').addEventListener('click', function () {
     if (gameRun){
-        if (minValue === maxValue){
-            const phraseRandom = Math.round( Math.random() * 3);
-            switch (phraseRandom) {
-                case 1:
-                    answerField.innerText =  `Вы загадали неправильное число!\n\u{1F914}`;
-                    break;
-                case 2:
-                    answerField.innerText =   `Я сдаюсь..\n\u{1F92F}`;
-                    break;
-                case 3:
-                    answerField.innerText =   `Что-то не так`;
-                    break;
-
-            }
-             gameRun = false;
+        if (minValue === maxValue || minValue == answerNumber){
+            let a = answerPhrase[ Math.floor( Math.random() * 3) ];
+            answerField.innerText = a;
+            gameRun = false;
         } else {
-            minValue = answerNumber  + 1;
+            maxValue = answerNumber  - 1;
             answerNumber  = Math.floor((minValue + maxValue) / 2);
-            resultTextNumber = toString(answerNumber);
-            const quesRandom = Math.round( Math.random() * 3);
-            switch (quesRandom) {
-                case 1:
-                 answerField.innerText = `Вы загадали число ${resultTextNumber}?`;
-                break;
-                case 2:
-                answerField.innerText = `Думаю, что загаданное число ${resultTextNumber}?`;
-                break;
-                case 3:
-                answerField.innerText = `Может ${resultTextNumber}?`;
-                break;
-            }
             orderNumber++;
             orderNumberField.innerText = orderNumber;
+            let b = guesRandom[ Math.floor( Math.random() * 3) ];
+            answerField.innerText = `${b} ${answerNumber}?`;
         }
     }
 })
 
 document.getElementById('btnEqual').addEventListener('click', function () {
-    const qRandom = Math.round( Math.random() * 3);
-    switch (qRandom) {
-        case 1:
-         answerField.innerText = `Я всегда угадываю\n\u{1F60E}`;
-        break;
-        case 2:
-        answerField.innerText = `Я так и знал\n\u{1F600}`;
-        break;
-        case 3:
-        answerField.innerText = `Ура\n\u{1F60E}`;
-        break;
-    }
+    if (gameRun){
+        let c = qRandom[ Math.floor( Math.random() * 3) ];
+        answerField.innerText = c;
         gameRun = false;
-    })
-
-    function  toString(answerNumber) {
- let number =  ["", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"];
- let numbers = ["десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"];
- let tennumbers = ["двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"];
- let hundnumbers = ["сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"];
- let numberResult = '';
- let numbersResult = '';
- let tenResult = '';
- let hundResult = '';
- let checkResult = '';
-
-  if   (answerNumber > 0) {
-
-    if ((answerNumber % 100 > 0 && answerNumber % 100 < 10) || (answerNumber % 10 > 0 && answerNumber % 10 < 10))
-        numberResult = number[answerNumber % 10];
-
-    if (answerNumber % 100 > 9 && answerNumber% 100 < 20)
-        numbersResult = numbers[answerNumber % 10];
-
-    if (Math.trunc(answerNumber % 100 / 10) > 1 && Math.trunc(answerNumber % 100 / 10) < 10)
-        tenResult = tennumbers[Math.trunc(answerNumber % 100 / 10) - 2];
-
-    if (Math.trunc(answerNumber / 100) > 0 && Math.trunc (answerNumber / 100) < 10)
-        hundResult = hundnumbers[Math.trunc(answerNumber / 100) - 1]
-
-    checkResult = `${hundResult} ${tenResult} ${numbersResult}${numberResult}`;
-
-    if (checkResult.length < 20) {
-        answerNumber = checkResult;
-        return answerNumber;
-
-    } else
-        return answerNumber;
-
-} else if (answerNumber < 0) {
-
-    answerNumber *= -1;
-    let minus = "минус"
-
-    if ((answerNumber % 100 > 0 && answerNumber % 100 < 10) || (answerNumber % 10 > 0 && answerNumber % 10 < 10))
-        numberResult = number[answerNumber % 10];
-
-    if (answerNumber % 100 > 9 && answerNumber % 100 < 20)
-        numbersResult = numbers[answerNumber % 10];
-
-    if (Math.trunc(answerNumber % 100 / 10) > 1 && Math.trunc(answerNumber % 100 / 10) < 10)
-        tenResult = tennumbers[Math.trunc(answerNumber % 100 / 10) - 2];
-
-    if (Math.trunc(answerNumber / 100) > 0 && Math.trunc(answerNumber / 100) < 10)
-        hundResult = hundnumbers[Math.trunc(answerNumber / 100) - 1]
-
-    checkResult = `${hundResult} ${tenResult} ${numbersResult}${numberResult}`;
-
-    if (checkResult.length < 20) {
-        answerNumber = `${minus} ${hundResult} ${tenResult} ${numbersResult}${numberResult}`;
-        return answerNumber;
-    } else
-        return answerNumber *= -1;
-
-} else {
-    number = ["ноль"];
-    return answerNumber = number[answerNumber];
-}
     }
+})
